@@ -136,6 +136,17 @@ underlying ``FieldData`` instance when ``save()`` is called on the ``XBlock``.
 Runtimes will call ``save()`` after an ``XBlock`` is constructed, and after
 every invocation of a handler, view, or method on an XBlock.
 
+**Important note:** Unlike Python classes you may have worked with before, you may not
+use an \_\_init\_\_ method in an XBlock.  This is because XBlocks get caused in many
+contexts (various views and runtimes), and the \_\_init\_\_ function may not be able
+to do certain things depending on the scope or context in which it is run.
+
+If you would like to use \_\_init\_\_ function for some reason, such as to implement
+more complicated logic for default field values, consider one of the following alternatives:
+- Use a lazy property decorator, so that when you first access an attribute, a function will
+be called to set that attribute.
+- Call the default-field-value logic in the view, instead of in \_\_init\_\_.
+
 **Important note:** At present, XBlocks does not support storing a very large amount
 of data in a single field.  This is because XBlocks fields are written and retrieved
 as single entities, reading the whole field into memory.  Thus, a field that contains,
