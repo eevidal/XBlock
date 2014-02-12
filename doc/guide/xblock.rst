@@ -118,6 +118,15 @@ information such as user name, geographic location, language, etc.
 - UserScope.ALL: User demographics.  You want to be able to aggregate data for all users in all
 courses.
 
+**A note about sharing data across XBlocks:** Sharing data between two blocks that are not scoped
+to know about each other is difficult.  In particular, the only way to share information across
+differently-scoped blocks is by putting that data in ALL.  However, putting data in ALL can
+introduce scoping and name conflict issues.  For instance, if two blocks that are both scoped
+to ALL have the same field name, both blocks will actually be pointing to the same data.
+
+For this reason, we encourage developers to be careful when deciding how to scope their
+XBlocks, taking into account this limitation.
+
 
 XBlocks declare their fields as class attributes in the XBlock class
 definition.  Each field has at least a name, a type, and a scope::
