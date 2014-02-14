@@ -40,18 +40,18 @@ by specifying their **scope**.
 * By XBlock: fields declare how they relate to the block:
 
   * Block usage: the fields are related *only* to that instance of the XBlock in
-  a particular course.
+    a particular course.
 
   * Block definition: the fields are related to the *definition* of the XBlock.
-  This definition is specified by the content creator.  For instance, using a
-  definition, you could create an XBlock whose data is shared across multiple
-  runs of a course.
+    This definition is specified by the content creator.  For instance, using a
+    definition, you could create an XBlock whose data is shared across multiple
+    runs of a course.
 
   * Block type: the fields are related to the *Python type* of the XBlock, and
-  thus shared across all instances of the XBlock in all courses).
+    thus shared across all instances of the XBlock in all courses.
 
   * All: the fields are related to all XBlocks, of all types (thus, any XBlock
-  can access the data).
+    can access the data).
 
 These two aspects, user and block, are independent.  A field scope specifies
 both.  For example:
@@ -88,44 +88,44 @@ An example of situations in which you might want to use each (UserScope, BlockSc
 
 BlockScope.USAGE:
 - UserScope.NONE: Settings.  You want something to be true for an entire course, but it is not
-specific to any users.
+  specific to any users.
 - UserScope.ONE: User state.  You want to keep track of questions a user has answered correctly
-and incorrectly.
+  and incorrectly.
 - UserScope.ALL: User state summary.  You want to compare how all the users are doing in a course.
 
 BlockScope.DEFINITION:
 - UserScope.NONE: Content.  You have some content you would like to share across several courses
-(i.e., a table of math formulas), but it is not specific to any user.
+  (i.e., a table of math formulas), but it is not specific to any user.
 - UserScope.ONE: Multi-course user state.  You want to keep track of the user's state across
-multiple courses.
+  multiple courses.
 - UserScope.ALL: Multi-course user state summary.  You want to compare how all users in all math
-courses are doing.
+  courses are doing.
 
 BlockScope.TYPE:
 - UserScope.NONE: XBlock content.  You have information related to this XBlock's functionality
-that needs to be shared across all XBlocks of its type, but it is not user-specific.
+  that needs to be shared across all XBlocks of its type, but it is not user-specific.
 - UserScope.ONE: User preferences.  In courses where this XBlock is present, you want to keep track
-of what preferences the user has chosen (for instance, selecting a particular type of display for
-the XBlock)
+  of what preferences the user has chosen (for instance, selecting a particular type of display for
+  the XBlock)
 - UserScope.ALL: User XBlock-related interaction summary.  In courses where this XBlock is present,
-you want to compare the different ways users interact with that XBlock.
+  you want to compare the different ways users interact with that XBlock.
 
 BlockScope.ALL:
 - UserScope.NONE: Global settings.  You want to establish information that all XBlocks anywhere
-should have access to.
+  should have access to.
 - UserScope.ONE: User information.  You want all XBlocks of all types to be able to access basic
-information such as user name, geographic location, language, etc.
+  information such as user name, geographic location, language, etc.
 - UserScope.ALL: User demographics.  You want to be able to aggregate data for all users in all
-courses.
+  courses.
 
 **A note about sharing data across XBlocks:** Sharing data between two blocks that are not scoped
 to know about each other is difficult.  In particular, the only way to share information across
 differently-scoped blocks is by putting that data in ALL.  However, putting data in ALL can
-introduce scoping and name conflict issues.  For instance, if two blocks that are both scoped
+introduce scoping and name conflict issues.  For instance, if two fields that are both scoped
 to ALL have the same field name, both blocks will actually be pointing to the same data.
 
 For this reason, we encourage developers to be careful when deciding how to scope their
-XBlocks, taking into account this limitation.
+fields, taking into account this limitation.
 
 
 XBlocks declare their fields as class attributes in the XBlock class
@@ -146,15 +146,15 @@ Runtimes will call ``save()`` after an ``XBlock`` is constructed, and after
 every invocation of a handler, view, or method on an XBlock.
 
 **Important note:** Unlike Python classes you may have worked with before, you may not
-use an \_\_init\_\_ method in an XBlock.  This is because XBlocks get caused in many
-contexts (various views and runtimes), and the \_\_init\_\_ function may not be able
+use an **init** method in an XBlock.  This is because XBlocks get called in many
+contexts (various views and runtimes), and the **init** function may not be able
 to do certain things depending on the scope or context in which it is run.
 
-If you would like to use \_\_init\_\_ function for some reason, such as to implement
+If you would like to use **init** function for some reason, such as to implement
 more complicated logic for default field values, consider one of the following alternatives:
 - Use a lazy property decorator, so that when you first access an attribute, a function will
-be called to set that attribute.
-- Call the default-field-value logic in the view, instead of in \_\_init\_\_.
+  be called to set that attribute.
+- Call the default-field-value logic in the view, instead of in **init**.
 
 **Important note:** At present, XBlocks does not support storing a very large amount
 of data in a single field.  This is because XBlocks fields are written and retrieved
